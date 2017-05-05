@@ -22,9 +22,9 @@ def run(filename):
         return
 
     ident(tmp)
-    stack = [ [x[:] for x in tmp] ]
+    systems = [ [x[:] for x in tmp] ]
     screen = new_screen()
-    tmp = []
+    edges = []
     step = 0.1
     for command in commands:
         print command
@@ -43,7 +43,7 @@ def run(filename):
         elif line == 'torus':
             #print 'TORUS\t' + str(args)
             add_torus(edges,
-                      float(args[1]), float(command[2]), float(command[3]),
+                      float(command[1]), float(command[2]), float(command[3]),
                       float(command[4]), float(command[5]), step)
             matrix_mult( systems[-1], edges )
             draw_polygons(edges, screen, color)
@@ -61,45 +61,45 @@ def run(filename):
         elif line == 'circle':
             #print 'CIRCLE\t' + str(command)
             add_circle(edges,
-                       float(command[0]), float(command[1]), float(command[2]),
-                       float(command[3]), step)
+                       float(command[1]), float(command[2]), float(command[3]),
+                       float(command[4]), step)
 
         elif line == 'hermite' or line == 'bezier':
             #print 'curve\t' + line + ": " + str(command)
             add_curve(edges,
-                      float(command[0]), float(command[1]),
-                      float(command[2]), float(command[3]),
-                      float(command[4]), float(command[5]),
-                      float(command[6]), float(command[7]),
+                      float(command[1]), float(command[2]),
+                      float(command[3]), float(command[4]),
+                      float(command[5]), float(command[6]),
+                      float(command[7]), float(command[8]),
                       step, line)                      
             
         elif line == 'line':            
             #print 'LINE\t' + str(command)
 
             add_edge( edges,
-                      float(command[0]), float(command[1]), float(command[2]),
-                      float(command[3]), float(command[4]), float(command[5]) )
+                      float(command[1]), float(command[2]), float(command[3]),
+                      float(command[4]), float(command[5]), float(command[6]) )
 
         elif line == 'scale':
             #print 'SCALE\t' + str(command)
-            t = make_scale(float(command[0]), float(command[1]), float(command[2]))
+            t = make_scale(float(command[1]), float(command[2]), float(command[3]))
             matrix_mult( systems[-1], t )
             systems[-1] = [ x[:] for x in t]
 
         elif line == 'move':
             #print 'MOVE\t' + str(command)
-            t = make_translate(float(command[0]), float(command[1]), float(command[2]))
+            t = make_translate(float(command[1]), float(command[2]), float(command[3]))
             matrix_mult( systems[-1], t )
             systems[-1] = [ x[:] for x in t]
 
 
         elif line == 'rotate':
             #print 'ROTATE\t' + str(command)
-            theta = float(command[1]) * (math.pi / 180)
+            theta = float(command[2]) * (math.pi / 180)
             
-            if command[0] == 'x':
+            if command[1] == 'x':
                 t = make_rotX(theta)
-            elif command[0] == 'y':
+            elif command[1] == 'y':
                 t = make_rotY(theta)
             else:
                 t = make_rotZ(theta)
@@ -125,5 +125,5 @@ def run(filename):
             if line == 'display':
                 display(screen)
             else:
-                save_extension(screen, command[0])
+                save_extension(screen, command[1])
             
